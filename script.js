@@ -109,6 +109,8 @@ function setTimerSlides(active) {
 }
 
 function startTimer(duration, displayId, next, type) {
+  clearInterval(intervalId); // Always clear any previous timer
+  running = true; // Set running here
   currentSeconds = duration;
   currentType = type;
   setTimerSlides(type);
@@ -124,12 +126,14 @@ function startTimer(duration, displayId, next, type) {
         document.getElementById('session-time').textContent = initialTime;
         setButtonText('Break');
         setBreakActive(true);
-        startBreak();
+        // Do NOT start break automatically
+        // Wait for user to click the button
       } else {
         document.getElementById('break-time').textContent = breakTime;
         setButtonText('Resume');
         setBreakActive(false);
-        startSession();
+        // Do NOT start session automatically
+        // Wait for user to click the button
       }
     }
   }, 1000);
@@ -219,6 +223,8 @@ function startSession() {
   setButtonText('Break');
   setBreakActive(false);
   setTimerSlides('session');
+  document.getElementById('break-time').textContent = breakTime; // Reset break timer when session starts
+  document.getElementById('session-time').textContent = initialTime; // Reset display
   startTimer(parseTime(initialTime), 'session-time', startBreak, 'session');
   scheduleHideButton();
 }
@@ -228,8 +234,9 @@ function startBreak() {
   setButtonText('Resume');
   setBreakActive(true);
   setTimerSlides('break');
+  document.getElementById('session-time').textContent = initialTime; // Reset session timer when break starts
+  document.getElementById('break-time').textContent = breakTime; // Reset display
   startTimer(parseTime(breakTime), 'break-time', startSession, 'break');
-  // Do not show the button or hide the glow here; let the state persist
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -238,14 +245,32 @@ document.addEventListener('DOMContentLoaded', () => {
   setButtonText('Start');
   setBreakActive(false);
   setTimerSlides('session');
-  document.getElementById('initialize-btn').addEventListener('click', () => {
-    if (!running) {
-      running = true;
-      if (currentType === 'break') {
+  const btn = document.getElementById('initialize-btn');
+  btn.addEventListener('click', () => {
+    console.log(
+      'Button clicked. running:',
+      running,
+      'currentType:',
+      currentType,
+      'btn.text:',
+      btn.textContent
+    );
+    if (btn.textContent.trim() === 'Break') {
+      if (running && currentType === 'session') {
+        // Skip session, go to break
+        clearInterval(intervalId);
+        running = false;
         startBreak();
-      } else {
-        startSession();
+      } else if (!running) {
+        startBreak();
       }
+    } else if (btn.textContent.trim() === 'Resume') {
+      // Always restart the session, even if timer is running
+      clearInterval(intervalId);
+      running = false;
+      startSession();
+    } else if (!running) {
+      startSession();
     }
   });
   setupButtonGlowEvents();
