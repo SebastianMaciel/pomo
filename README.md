@@ -1,3 +1,5 @@
+<img width="509" height="475" alt="image" src="https://github.com/user-attachments/assets/0325537f-7ddf-4b61-aa03-7647461a648f" />
+
 # Chill Timer
 
 A relaxing, minimalistic Pomodoro timer to help you focus and unwind.
