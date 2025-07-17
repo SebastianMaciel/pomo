@@ -1,5 +1,3 @@
-console.log('Chill Timer script loaded.');
-
 function getUrlParams() {
   const params = new URLSearchParams(window.location.search);
   let session = params.get('session');
@@ -126,14 +124,18 @@ function startTimer(duration, displayId, next, type) {
         document.getElementById('session-time').textContent = initialTime;
         setButtonText('Break');
         setBreakActive(true);
-        // Do NOT start break automatically
-        // Wait for user to click the button
+        // Automatically start break after a short delay
+        setTimeout(() => {
+          startBreak();
+        }, 1000); // 1s delay for UX
       } else {
         document.getElementById('break-time').textContent = breakTime;
         setButtonText('Resume');
         setBreakActive(false);
-        // Do NOT start session automatically
-        // Wait for user to click the button
+        // Automatically start session after a short delay
+        setTimeout(() => {
+          startSession();
+        }, 1000); // 1s delay for UX
       }
     }
   }, 1000);
@@ -218,7 +220,13 @@ function setupButtonGlowEvents() {
   });
 }
 
+// Add audio objects for sound effects
+const startAudio = new Audio('start.ogg');
+const breakAudio = new Audio('break.ogg');
+
 function startSession() {
+  startAudio.currentTime = 0; // rewind to start
+  startAudio.play();
   isSession = true;
   setButtonText('Break');
   setBreakActive(false);
@@ -230,6 +238,8 @@ function startSession() {
 }
 
 function startBreak() {
+  breakAudio.currentTime = 0; // rewind to start
+  breakAudio.play();
   isSession = false;
   setButtonText('Resume');
   setBreakActive(true);
@@ -247,14 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimerSlides('session');
   const btn = document.getElementById('initialize-btn');
   btn.addEventListener('click', () => {
-    console.log(
-      'Button clicked. running:',
-      running,
-      'currentType:',
-      currentType,
-      'btn.text:',
-      btn.textContent
-    );
     if (btn.textContent.trim() === 'Break') {
       if (running && currentType === 'session') {
         // Skip session, go to break
