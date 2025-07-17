@@ -2,6 +2,8 @@
 
 # Chill Timer
 
+[Try it](https://pomo.sebastianmaciel.dev/?session=25&break=5)
+
 A relaxing, minimalistic Pomodoro timer to help you focus and unwind.
 
 ## Features
