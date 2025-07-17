@@ -254,3 +254,50 @@ button,
 #initialize-btn.break-active:hover {
   border-color: #ffb480;
 }
+
+/* Sound toggle button styles */
+#sound-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 100;
+  background: #23293aee;
+  border: 1.5px solid #a3d8ef44;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px #2226, 0 0 0 0 #a3d8ef22;
+  padding: 0.4rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+}
+#sound-toggle:hover,
+#sound-toggle:focus {
+  background: #2a3a4a;
+  border-color: #a3d8efcc;
+  box-shadow: 0 4px 16px #a3d8ef44, 0 0 0 2px #a3d8ef33;
+}
+#sound-toggle svg {
+  display: block;
+  width: 1.6rem;
+  height: 1.6rem;
+  color: #a3d8ef;
+  pointer-events: none;
+}
+@media (max-width: 500px) {
+  #sound-toggle {
+    top: 0.7rem;
+    right: 0.7rem;
+    width: 2rem;
+    height: 2rem;
+    padding: 0.2rem;
+  }
+  #sound-toggle svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
